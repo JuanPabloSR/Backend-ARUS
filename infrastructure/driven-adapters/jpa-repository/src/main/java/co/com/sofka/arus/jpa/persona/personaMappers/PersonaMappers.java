@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PersonaMappers {
-    private PersonaMappers(){
+    private PersonaMappers() {
         throw new IllegalStateException("Utility class");
     }
 
-    public static Persona convertirPersonaDataAPersona(PersonaData data){
+    public static Persona convertirPersonaDataAPersona(PersonaData data) {
         return Persona.builder()
                 .idPersona(data.getIdPersona())
                 .tipoDocumento(data.getTipoDocumento())
@@ -22,7 +22,8 @@ public class PersonaMappers {
                 .genero(data.getGenero())
                 .build();
     }
-    public static PersonaData convertirPersonaAPersonaData(Persona dominio){
+
+    public static PersonaData convertirPersonaAPersonaData(Persona dominio) {
         PersonaData personaData = new PersonaData();
         personaData.setIdPersona(dominio.getIdPersona());
         personaData.setTipoDocumento(dominio.getTipoDocumento());
@@ -35,7 +36,7 @@ public class PersonaMappers {
         return personaData;
     }
 
-    public static List<Persona> convertirPersonasDataAPersonas(List<PersonaData> personas){
+    public static List<Persona> convertirPersonasDataAPersonas(List<PersonaData> personas) {
         return personas.stream()
                 .map(PersonaMappers::convertirPersonaDataAPersona)
                 .collect(Collectors.toList());

@@ -1,7 +1,10 @@
 package co.com.sofka.arus.api;
 
 import co.com.sofka.arus.model.causante.Causante;
+import co.com.sofka.arus.model.persona.gateways.PersonaRepository;
+import co.com.sofka.arus.model.publicarCausante.PublicarCausante;
 import co.com.sofka.arus.usecase.causante.CausanteUseCase;
+import co.com.sofka.arus.usecase.publicarCausante.PublicarCausanteUseCase;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -15,7 +18,9 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class CausanteRest {
 
+    private final PersonaRepository personaRepository;
     private final CausanteUseCase causanteUseCase;
+    private final PublicarCausanteUseCase publicarCausanteUseCase;
 
     @GetMapping(path = "/listarCausantes")
     public Flux<Causante> listarCausantes(){
@@ -27,10 +32,21 @@ public class CausanteRest {
         return causanteUseCase.buscarById(idCausante);
     }
 
+//    @PostMapping(path = "/crearCausante")
+//    public Mono<Causante> crearCausante(@RequestBody Causante causante){
+//        return causanteUseCase.crearCausante(causante);
+//    }
+
     @PostMapping(path = "/crearCausante")
     public Mono<Causante> crearCausante(@RequestBody Causante causante){
+        personaRepository.buscarPersonaById(causante.getPersona().getIdPersona()).map(persona->{
+//            return publicarCausanteUseCase.enviarCausante(PublicarCausante.builder().documentoCausante(persona.getDocumento()).build()).subscribe();
+            return publicarCausanteUseCase.enviarCausante(PublicarCausante.builder().tipoDocumento(persona.getTipoDocumento()).documentoCausante(persona.getDocumento()).build()).subscribe();
+        }).subscribe();
+
         return causanteUseCase.crearCausante(causante);
     }
+
 
     @PutMapping(path = "/actualizarCausante/{idCausante}")
     public Mono<Causante> actualizarCausante(@PathVariable Integer idCausante, @RequestBody Causante causante){

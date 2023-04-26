@@ -40,8 +40,8 @@ public class PersonaRepositoryAdapter extends AdapterOperations<Persona, Persona
         } else {
             return Mono.error(new IllegalArgumentException(exceptionPersonaNoExiste));
         }
-
     }
+
 
     @Override
     public Mono<Persona> crearPersona(Persona persona) {

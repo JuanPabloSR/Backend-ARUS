@@ -58,27 +58,6 @@ public class CausanteRepositoryAdapter extends AdapterOperations<Causante, Causa
     }
 
 
-
-//    public Mono<Causante> validarCausante(Causante causante, PersonaData personaData){
-//        return Objects.isNull(comprobarCausante(personaData.getDocumento()))
-//                ? Mono.error(new RuntimeException(exceptionCausanteNoExiste))
-//                : Mono.just(CausanteMappers.convertirCausanteDataACausante(repository.save(convertirCausanteACausanteData(causante))));
-//    }
-
-//    public Mono<Causante> validarCausante(Causante causante, PersonaData personaData) {
-//        var tipoDocumento = personaData.getTipoDocumento();
-//        var documento = personaData.getDocumento();
-//        return comprobarCausante(personaData.getTipoDocumento(), personaData.getDocumento())
-//                .flatMap(existeCausante -> {
-//                    if (!existeCausante) {
-//                        return Mono.error(new RuntimeException(exceptionCausanteNoExiste));
-//                    }
-//                    return Mono.just(repository.save(convertirCausanteACausanteData(causante)))
-//                            .map(CausanteMappers::convertirCausanteDataACausante)
-//                            .map(rentaRepository.crearRenta(crearRenta(tipoDocumento,documento)));
-//                });
-//    }
-
     public Mono<Causante> validarCausante(Causante causante, PersonaData personaData) {
         var tipoDocumento = personaData.getTipoDocumento();
         var documento = personaData.getDocumento();
@@ -90,9 +69,7 @@ public class CausanteRepositoryAdapter extends AdapterOperations<Causante, Causa
                     return Mono.just(repository.save(convertirCausanteACausanteData(causante)))
                             .map(CausanteMappers::convertirCausanteDataACausante)
                             .flatMap(c -> rentaRepository.crearRenta(crearRenta(tipoDocumento, documento, c)))
-                            .map(renta -> {
-                                return causante;
-                            });
+                            .map(renta -> causante);
                 });
     }
 
@@ -103,18 +80,6 @@ public class CausanteRepositoryAdapter extends AdapterOperations<Causante, Causa
         var renta = new Renta(new Date(), respuesta.getSalarioActual(), respuesta.getMesesCotizados());
         return renta;
     }
-
-//    public Renta crearRenta(String tipoDocumento, Integer documento, Causante causante) {
-//        var uri = "http://localhost:8080/api/renta/" + tipoDocumento + "/" + documento;
-//        var respuesta = restTemplate.getForObject(uri, Renta.class);
-//        if (respuesta == null) {
-//            // Manejar la situación donde no se pudo obtener una respuesta válida
-//            throw new RuntimeException("No se pudo obtener una respuesta válida de la llamada a la API de renta");
-//        }
-//        var renta = new Renta(new Date(), respuesta.getSalarioActual(), respuesta.getMesesCotizados());
-//        return renta;
-//    }
-//
 
     @Override
     public Mono<Boolean> comprobarCausante(String tipoDocumento, Integer documento) {
@@ -144,7 +109,6 @@ public class CausanteRepositoryAdapter extends AdapterOperations<Causante, Causa
                 .orElse(Mono.error(new IllegalArgumentException(exceptionCausanteNoExiste)));
     }
 
-
     @Override
     public Mono<Causante> buscarCausanteById(Integer idCausante) {
         if (repository.findById(idCausante).isPresent()) {
@@ -153,6 +117,5 @@ public class CausanteRepositoryAdapter extends AdapterOperations<Causante, Causa
             return Mono.error(new IllegalArgumentException(exceptionCausanteNoExiste));
         }
     }
-
 
 }

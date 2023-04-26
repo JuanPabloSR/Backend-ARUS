@@ -11,26 +11,25 @@ public class PersonaUseCase {
 
     private final PersonaRepository personaRepository;
 
-    public Flux<Persona> listarPersonas(){
+    public Flux<Persona> listarPersonas() {
         return personaRepository.listarPersonas();
     }
-    public Mono<Persona> buscarById(Integer idPersona){
+
+    public Mono<Persona> buscarById(Integer idPersona) {
         return personaRepository.buscarPersonaById(idPersona);
     }
 
-    public Mono<Persona> crearPersona(Persona persona){
+    public Mono<Persona> crearPersona(Persona persona) {
         return personaRepository.crearPersona(persona);
     }
 
-    public Mono<Persona> actualizarPersona(Integer idPersona, Persona persona){
+    public Mono<Persona> actualizarPersona(Integer idPersona, Persona persona) {
         return personaRepository.actualizarPersona(idPersona, persona);
     }
 
-    public Mono<Void> eliminarPersona(Integer idPersona){
+    public Mono<Void> eliminarPersona(Integer idPersona) {
         return personaRepository.eliminarPersona(idPersona);
     }
-
-
 
 
 }
